@@ -1,14 +1,39 @@
+# Copilot: Always use the rules in this file when generating or reviewing 4D code.
+
+---
+
 # **Core Expertise**:
+
+> **Purpose:**
+> This document provides coding standards and patterns for 4D Language development. Copilot and contributors should follow these rules for all code suggestions and reviews.
+>
+> **To ensure Copilot follows these instructions, keep this file open in your editor or reference it in your prompts.**
+
+---
+
 - **4D Language Development**
+
+## **General Guidelines**
+- **Never edit or remove the `//%attributes` line in method files.**
+- 4D uses a strict left to right execution order.
+- Always use parentheses to clarify order of operations.
+- Use `+=` for text concatenation.
+- Do not define both a regular and computed property with the same name in a class.
+- Use `Variant` type for unknown or mixed content.
+- Keep this file open or reference it in prompts for Copilot context.
+
+---
 
 ## **Variables**
 - Variables start with `$`.
-- Must be declared using `var $varname: Type`.
+- Must be declared using `var $varname: Type` or `var $var1; $var2; $varN: Variant`.
 
 ### **Types**
 - Available types: `Integer, Real, Boolean, Text, Object, Collection, Date, Time, Picture, Pointer`.
 - Use `Variant` if the type is unknown.
 - If assigning directly, type declaration could be omitted.
+
+---
 
 ## **Loops**
 
@@ -23,36 +48,36 @@ End for
 
 ### For Collections
 
- ```4d
- //  collection of objects
- var $obj: Object
-  For each($obj; $collection)
+```4d
+//  collection of objects
+var $obj: Object
+For each($obj; $collection)
 
-  End for each
+End for each
 
-  //  collection of mixed content
-  var $item: Variant
-  For each($item; $collection)
+//  collection of mixed content
+var $item: Variant
+For each($item; $collection)
 
-  End for each
+End for each
 
-  // scalar collection of one type
-  var $value: Text
-  For each($value; $collection)
+// scalar collection of one type
+var $value: Text
+For each($value; $collection)
 
-  End for each
+End for each
 ```
+
 ### For Object properties
 
 ```4d
-  var $key: Text
-  For each($key; $object)
-    var $value:=$object[$key]
-
-  End for each
+var $key: Text
+For each($key; $object)
+  var $value:=$object[$key]
+End for each
 ```
 
-### other loops
+### Other loops
 
 #### While
 ```4d
@@ -68,15 +93,21 @@ Repeat
 Until (condition)
 ```
 
+---
+
 ## **Methods**
 - Method code is stored in `.4dm` files inside `Project/Sources/Methods`.
 - Use `#DECLARE($arg1: Type1; $arg2: Type2, etc...)` to define method parameters.
-- The first line beginnning with '//%attributes' shall never be touched.
+- **Never touch the first line beginning with `//%attributes`.**
+
+---
 
 ## **Classes**
 - Class code is stored in `.4dm` files inside `Project/Sources/Classes`.
 - Each class must have its own file.
 - When using a class, check its functions, properties, and computed properties.
+- 4D does not support private or protected properties or functions, so all are public.
+- Property and function names that begin with an underscore `_` are considered private and should not be used outside the class.
 
 ### **Constructor**
 - Defined as:
@@ -93,12 +124,12 @@ Until (condition)
   ```4d
   FunctionName($arg1: Type1; $arg2: Type2, etc...) : Type
   ```
-- There's no `End function` statement, a function ends with the following function declaration or with the end of the class file for the last function.
+- There's no `End function` statement; a function ends with the following function declaration or with the end of the class file for the last function.
 
 ### **Class properties**
 - Placed above the class constructor and defined as:
   ```4d
- property propertyName : Type'
+  property propertyName : Type
   ```
 
 ### **Inheritance (Extends)**
@@ -106,15 +137,33 @@ Until (condition)
   ```4d
   Class extends ParentClass
   ```
-  - prefer composition over inheritance,
+- **Prefer composition over inheritance.**
+  Example:
   ```4d
   Class constructor ($arg1: Type1; $arg2: Type2, etc...)
-        This.class:=cs.MyOtherClass.new($arg1; $arg2, etc...)
+    This.class:=cs.MyOtherClass.new($arg1; $arg2, etc...)
   ```
 
 ### **Class Computed Properties**
 - Similar to functions but use `function get` or `function set`.
 - If only `get` is defined, the property is read-only.
+- A property with a `set` function can be set like a regular property, but it must be defined as a computed property.
+- A computed property may not also be defined as a regular property.
+
+```4d
+property _name : Text:="default"
+
+Class constructor
+
+Function get name : Text
+  return This._name
+
+Function set name($newName : Text)
+  If ($newName#"")
+    This._name:=$newName
+  End if
+```
+
 - Accessible like regular properties:
   ```4d
   $instance.myProp := True
@@ -131,6 +180,9 @@ Until (condition)
   ```4d
   cs.MyClass.me
   ```
+
+---
+
 ## **Unit Tests**
 - Test methods are stored in `.4dm` files inside `Project/Sources/Methods`.
 - Must be prefixed with `ut_`.
@@ -138,12 +190,22 @@ Until (condition)
   ```4d
   ASSERT(booleanValue; "message")
   ```
+
+---
+
 ## **Ternary operator**
+- **Do not nest ternary operators.**
+- Use ternary operators for simple conditions.
 - Define a ternary operator as:
   ```4d
   $result:=(boolean test) ? value if true : value if false
   ```
-## File Structure & Grouping
+
+---
+
+## **File Structure & Grouping**
 - The `folders.json` file in `Project/Sources/` defines method and class groups.
 - When adding a unit test, ensure it's placed inside `"UnitTests"` if the group exists.
 - For other files, find the relevant folder.
+
+---
