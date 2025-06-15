@@ -1,1 +1,1 @@
-Your goal is to chack logical issues in this 4D code, like infinite loops.
+Your goal is to check logical issues in this 4D code, like infinite loops.
