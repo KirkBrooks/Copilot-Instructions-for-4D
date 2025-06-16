@@ -152,16 +152,24 @@ Until (condition)
 
 ```4d
 property _name : Text:="default"
+property birthDate : Date
 
 Class constructor
 
 Function get name : Text
-  return This._name
+	return This._name
 
 Function set name($newName : Text)
-  If ($newName#"")
-    This._name:=$newName
-  End if
+	If ($newName#"")
+		This._name:=$newName
+	End if
+
+Function age : Integer
+	If (This.birthDate=!00-00-00!)
+		return 0
+	else
+		return (Current date-!1955-01-02!)\365
+	End if
 ```
 
 - Accessible like regular properties:
