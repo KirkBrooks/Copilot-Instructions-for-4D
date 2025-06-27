@@ -134,9 +134,15 @@ Until (condition)
 
 ### **Inheritance (Extends)**
 - If extending another class, declare at the beginning of the file:
-  ```4d
+  - Property declarations follow the `extends` declaration.
+  - Then the class constructor.
+    ```4d
   Class extends ParentClass
+  property name: Text
+  Class constructor ($arg1: Type1; $arg2: Type2, etc...)
+    This.name:=$arg1
   ```
+
 - **Prefer composition over inheritance.**
   Example:
   ```4d
@@ -204,6 +210,8 @@ Function age : Integer
 ## **Ternary operator**
 - **Do not nest ternary operators.**
 - Use ternary operators for simple conditions.
+- Use `If` statements for complex conditions.
+- Prefer ternary operators over Choose(condition; value if true; value if false).
 - Define a ternary operator as:
   ```4d
   $result:=(boolean test) ? value if true : value if false
@@ -217,3 +225,37 @@ Function age : Integer
 - For other files, find the relevant folder.
 
 ---
+ ## **Regex match**
+ ```4d
+$pattern:="^(.+) (.+)$"
+$input:="Hello World"
+
+var $pos; $len: Integer
+If (Regex match($pattern; $input; 1; $pos; $len))
+  // $pos = position of the match in $input
+  // $len = length of the match
+End if
+```
+
+```4d
+$pattern:="^(.+) (.+)$"
+$input:="Hello World"
+
+array longint($pos; 0)
+array longint($len;0)
+If (Regex match($pattern; $input; 1; $pos; $len))
+  // $pos{0} = position of the match in $input
+  // $len{0} = length of the match
+
+$group1:=Substring($input;$pos{1}; $len{1})
+$group2:=Substring($input;$pos{2}; $len{2})
+
+End if
+```
+---
+
+Wrong: Get 4D folder(Desktop folder)
+Correct: System folder(Desktop)
+
+Wrong: $x:=Max(1;2;3)
+Correct: $x:=[1;2;3].max()  // .min()
