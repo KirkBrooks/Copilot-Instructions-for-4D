@@ -21,6 +21,9 @@
 - Do not define both a regular and computed property with the same name in a class.
 - Use `Variant` type for unknown or mixed content.
 - Keep this file open or reference it in prompts for Copilot context.
+- use ; for parameter separation, not ,
+- Use `:=` for assignment, not `=`.
+- Do not use ; for end of code lines.
 
 ---
 
@@ -33,6 +36,8 @@
 - Use `Variant` if the type is unknown.
 - If assigning directly, type declaration could be omitted.
 
+- Date literals use ! (exclamation marks): !2025-01-09! or !00-00-00!
+- Time literals use ? (question marks): ?14:30:00? or ?00:00:00?
 ---
 
 ## **Loops**
