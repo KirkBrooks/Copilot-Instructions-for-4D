@@ -25,6 +25,15 @@
 - Use `:=` for assignment, not `=`.
 - Do not use ; for end of code lines.
 
+## **Components**
+Compenents are stored inside `Project/Components`. A component is itself a 4D project that can share methods, classes and forms with the main project.
+- 'Host' refers to the main project.
+- 'Component' refers to the component project.
+- Component methods must have the `Shared by components and host project` attribute set to `true` to be accessible from the host project and are accessed as `methodName()` from the host project.
+- Host methdods can be accessed from the component project if they are declared as `Shared by components and host project`
+- Component classes are accessible from the host project if the `class namespace` is defined in the component project.
+- Component classes are accessed as `cs.ComponentNamespace.ClassName` from the host project.
+- Component classes named with a leading '_' are not shared.
 ---
 
 ## **Variables**
