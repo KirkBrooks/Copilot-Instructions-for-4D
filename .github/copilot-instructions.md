@@ -18,8 +18,7 @@
 - 4D uses a strict left to right execution order.
 - Always use parentheses to clarify order of operations.
 - Use `+=` for text concatenation.
-- Do not define both a regular and computed property with the same name in a class.
-- Use `Variant` type for unknown or mixed content.
+- Use `Variant` data type for unknown or mixed content.
 - Keep this file open or reference it in prompts for Copilot context.
 - use ; for parameter separation, not ,
 - Use `:=` for assignment, not `=`.
@@ -166,9 +165,9 @@ Until (condition)
 
 ### **Class Computed Properties**
 - Similar to functions but use `function get` or `function set`.
+- Do not define both a regular and computed property with the same name in a class.
 - If only `get` is defined, the property is read-only.
 - A property with a `set` function can be set like a regular property, but it must be defined as a computed property.
-- A computed property may not also be defined as a regular property.
 
 ```4d
 property _name : Text:="default"
@@ -273,3 +272,17 @@ Correct: System folder(Desktop)
 
 Wrong: $x:=Max(1;2;3)
 Correct: $x:=[1;2;3].max()  // .min()
+
+## Case of Statement
+4D has a very powerful case of statement that can be used to replace nested if statements and switch statements.
+```4d
+Case of
+  :(condition1)
+    // code block
+  :(condition2)
+    // code block
+  :(condition3)
+    // code block
+Else
+  // default code block
+End case
